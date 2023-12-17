@@ -43,8 +43,8 @@ async function setAccepted(excel_file){
 async function setExpelled(excel_file, reason_file, reason_file_ds){
     const data = new FormData();
     data.append('excel_file', excel_file, excel_file.name);
-    data.append('excel_file', reason_file, reason_file.name);
-    data.append('excel_file', reason_file_ds, reason_file_ds.name);
+    data.append('reason_file', reason_file, reason_file.name);
+    data.append('reason_file_ds', reason_file_ds, reason_file_ds.name);
     return await fetch(
         SET_EXPELLED,
         {
