@@ -12,7 +12,7 @@ const ReportForm = props => {
     const handleSubmit = e => {
         e.preventDefault();
         const file = selectedFile[0];
-        if (!file || file.name.includes('xls')){
+        if (!(file && file.name.includes('xls'))){
             alert('Необходимо приложить отчет в формате xls');
             return;
         }
