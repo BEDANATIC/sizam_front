@@ -12,24 +12,26 @@ function getErrorType(code){
 }
 
 async function post(path, body){
+    let response;
     try{
-        const response = await fetch(
+        response = await fetch(
             path,
             {
                 method: 'POST',
                 body: body 
             }
         );
-        const msg = await response.json();
-        if (!response.ok) {
-            const errType = getErrorType(response.status);
-            throw new Error(`${errType}: ${msg}`)
-        }
-        return msg;
     } catch (err) {
-        console.log(err.message)
+        console.log(err)
         throw new Error('Ошибка при подключении. Возможно хост не найден, или соединение было прервано. Ошибка: ' + err.message);
     }
+
+    const msg = await response.json();
+    if (!response.ok) {
+        const errType = getErrorType(response.status);
+        throw new Error(`${errType}: ${msg}`)
+    }
+    return msg;
 }
 
 
