@@ -22,7 +22,7 @@ function FilePicker({
     return (
         <div className='file-picker'>
             <label className="file-field">
-                <h3>Перенесите файл в эту область или кликните для выбора в отдельном окне</h3>
+                <h3>Перенесите файл в эту область или кликните для выбора в отдельном окне. Выбрано {selectedFiles.length}/{maxFiles}</h3>
                 <SelectedFiles files={selectedFiles}/>
                 <input
                     className='file'
