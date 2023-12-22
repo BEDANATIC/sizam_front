@@ -1,5 +1,5 @@
 import './filePicker.sass';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 function SelectedFiles({files = []}){
     return (
@@ -15,10 +15,15 @@ function FilePicker({
     ...props
 }){
     const [selectedFiles, setSelectedFiles] = useState([]);
-    useEffect(() => onSelected(selectedFiles), [selectedFiles]);
+
     const handleSelect = event => {
-        setSelectedFiles(prev => [...prev, event.target.files[0]].slice(maxFiles * -1));
+        setSelectedFiles(prev => {
+            const newSelectedFiles = [...prev, event.target.files[0]].slice(maxFiles * -1);
+            onSelected(newSelectedFiles);
+            return newSelectedFiles;
+        });
     };
+
     return (
         <div className='file-picker'>
             <label className="file-field">

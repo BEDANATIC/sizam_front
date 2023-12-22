@@ -29,15 +29,24 @@ const REPORT_TYPE_MAPPING = [
     }
 ];
 
-
+const DEFAULT_MESSAGE = {type: 'info', text: ''};
 const ReportForm = props => {
-    const [selectedFile, setSelectedFile] = useState();
+    const [selectedFile, setSelectedFile] = useState([]);
     const [selectedReportTypeIdx, setSelectedReportTypeIdx] = useState(0);
-    const [message, setMessage] = useState({type: 'info', text: ''});
+    const [message, setMessage] = useState(DEFAULT_MESSAGE);
     const [isUploaded, setIsUploaded] = useState(null);
 
-    const handleSubmit = async e => {
-        e.preventDefault();
+    const handleDropListItemChanged = newIdx => {
+        setMessage(DEFAULT_MESSAGE);
+        setSelectedReportTypeIdx(newIdx);
+    }
+
+    const handleSubmit = async event => {
+        event.preventDefault();
+        if (REPORT_TYPE_MAPPING[selectedReportTypeIdx].filesRequired  > selectedFile.length){
+            setMessage({type: 'error', text:'Недостаточно файлов'});
+            return;
+        }
         for (let file of selectedFile) {
             if (!(file && file.name.includes('xls'))){
                 setMessage({type: 'error', text:'Необходимо приложить отчет в формате xls'});
@@ -60,8 +69,9 @@ const ReportForm = props => {
             : (
                 <form className='reportForm'>
                     Тип отчета:
-                    <DropList onChanged={setSelectedReportTypeIdx} variants={REPORT_TYPE_MAPPING.map(item => item.name)}/>
+                    <DropList onChanged={handleDropListItemChanged} variants={REPORT_TYPE_MAPPING.map(item => item.name)}/>
                     <FilePicker 
+                        key={selectedReportTypeIdx}
                         maxFiles={REPORT_TYPE_MAPPING[selectedReportTypeIdx].filesRequired} 
                         onSelected={setSelectedFile}
                     />
@@ -71,7 +81,7 @@ const ReportForm = props => {
                     >
                         Отправить
                     </button>
-                    <h4 style={{color: (message.type != 'info') ? 'red' : 'green'}}>{message.text || ''}</h4>
+                    <h4 style={{color: (message.type !== 'info') ? 'red' : 'green'}}>{message.text || ''}</h4>
                 </form>
             )
     );
